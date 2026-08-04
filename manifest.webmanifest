@@ -1,0 +1,26 @@
+{
+  "name": "일요일 오후 뮤지엄",
+  "short_name": "오후뮤지엄",
+  "description": "시즌 1~7 문화탐방, 체크리스트, 방문기록과 궁궐 빠른 링크를 제공하는 가족 뮤지엄 앱",
+  "lang": "ko-KR",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#fbf5e9",
+  "theme_color": "#fbf5e9",
+  "icons": [
+    {
+      "src": "./icon-192-v15.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-512-v15.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

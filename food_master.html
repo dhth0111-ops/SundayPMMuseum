@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f9f5ef">
+<title>Sunday PM Museum · 맛집 마스터</title>
+<style>
+:root{--bg:#f8f5ef;--card:#fff;--text:#29231f;--muted:#786f68;--line:#e8e0d7;--green:#55735d;--red:#c85c56;--gold:#c9911d;--shadow:0 8px 24px rgba(56,40,26,.08)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",sans-serif}
+.wrap{max-width:860px;margin:auto;padding:18px 14px 110px}
+.hero{background:linear-gradient(135deg,#fff 0%,#f5eee5 100%);border:1px solid var(--line);border-radius:24px;padding:22px;box-shadow:var(--shadow)}
+.hero h1{margin:0 0 6px;font-size:25px}
+.hero p{margin:0;color:var(--muted);font-size:14px}
+.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}
+.stat{background:rgba(255,255,255,.78);border:1px solid var(--line);border-radius:16px;padding:13px;text-align:center}
+.stat b{display:block;font-size:21px} .stat span{font-size:12px;color:var(--muted)}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0}
+button,.file-btn{border:1px solid var(--line);background:#fff;color:var(--text);border-radius:12px;padding:10px 13px;font-weight:700;cursor:pointer}
+button.primary{background:var(--green);color:white;border-color:var(--green)}
+button.danger{color:var(--red)}
+.file-btn input{display:none}
+.search{width:100%;border:1px solid var(--line);background:#fff;border-radius:14px;padding:13px 14px;font-size:15px;outline:none}
+.area-tabs{display:flex;gap:8px;overflow:auto;padding:12px 0 5px;scrollbar-width:none}
+.area-tabs::-webkit-scrollbar{display:none}
+.tab{white-space:nowrap;border-radius:999px;padding:9px 13px}
+.tab.active{background:var(--text);color:#fff;border-color:var(--text)}
+.area-card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px;margin-top:12px;box-shadow:var(--shadow)}
+.area-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.area-head h2{margin:0;font-size:20px}
+.area-actions{display:none;gap:5px} .manage-on .area-actions{display:flex}
+.mini{padding:7px 9px;border-radius:9px;font-size:12px}
+.food-list{display:grid;gap:9px;margin-top:14px}
+.food{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;border:1px solid var(--line);border-radius:14px;padding:11px 12px;background:#fff}
+.food input{width:20px;height:20px;accent-color:var(--green)}
+.food.checked .food-name{text-decoration:line-through;color:#aaa}
+.food-name{font-weight:800}
+.food-meta{font-size:12px;color:var(--muted);margin-top:2px}
+.badge{font-size:11px;border-radius:999px;padding:4px 8px;font-weight:800}
+.fixed{background:#fbeceb;color:var(--red)} .candidate{background:#eaf2ec;color:var(--green)} .personal{background:#fff3d5;color:#9a6a00}
+.food-actions{display:none;gap:4px} .manage-on .food-actions{display:flex}
+.empty{padding:30px;text-align:center;color:var(--muted)}
+.fab{position:fixed;right:18px;bottom:22px;width:58px;height:58px;border-radius:50%;background:var(--green);color:white;border:none;font-size:27px;box-shadow:0 10px 25px rgba(52,83,60,.35)}
+.modal{position:fixed;inset:0;background:rgba(20,16,13,.45);display:none;align-items:flex-end;justify-content:center;z-index:20}
+.modal.show{display:flex}
+.sheet{width:min(100%,700px);background:#fff;border-radius:24px 24px 0 0;padding:20px;max-height:90vh;overflow:auto}
+.sheet h3{margin:0 0 15px}
+.field{margin:12px 0} .field label{display:block;font-size:13px;font-weight:800;margin-bottom:6px}
+.field input,.field select{width:100%;border:1px solid var(--line);border-radius:12px;padding:12px;font-size:15px}
+.sheet-actions{display:flex;gap:8px;margin-top:18px} .sheet-actions button{flex:1}
+.notice{font-size:12px;color:var(--muted);margin-top:12px}
+@media(max-width:520px){.summary{grid-template-columns:repeat(3,1fr)}.stat{padding:10px 5px}.stat b{font-size:18px}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app">
+  <section class="hero">
+    <h1>🍜 맛집 마스터</h1>
+    <p>생활권별 픽스·후보·개인픽을 한곳에서 관리합니다.</p>
+    <div class="summary">
+      <div class="stat"><b id="areaCount">0</b><span>생활권</span></div>
+      <div class="stat"><b id="foodCount">0</b><span>맛집</span></div>
+      <div class="stat"><b id="visitedCount">0</b><span>방문 체크</span></div>
+    </div>
+  </section>
+
+  <div class="toolbar">
+    <button class="primary" id="manageBtn">관리모드 켜기</button>
+    <button id="addAreaBtn">＋ 생활권 추가</button>
+    <button id="exportBtn">JSON 백업</button>
+    <label class="file-btn">JSON 복원<input id="importInput" type="file" accept=".json,application/json"></label>
+    <button class="danger" id="resetBtn">기본값 복원</button>
+  </div>
+
+  <input class="search" id="search" placeholder="맛집 이름 검색">
+  <div class="area-tabs" id="tabs"></div>
+  <main id="content"></main>
+  <p class="notice">체크와 수정 내용은 이 기기의 브라우저에 자동 저장됩니다.</p>
+</div>
+
+<button class="fab" id="fab" aria-label="맛집 추가">＋</button>
+
+<div class="modal" id="modal">
+  <div class="sheet">
+    <h3 id="modalTitle">맛집 추가</h3>
+    <div id="formArea"></div>
+    <div class="sheet-actions">
+      <button id="cancelBtn">취소</button>
+      <button class="primary" id="saveBtn">저장</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const INITIAL = [{"id": "yongsan", "name": "용산", "restaurants": [{"name": "문배동육칼", "type": "fixed", "spot": "전쟁기념관"}, {"name": "능동미나리", "type": "fixed", "spot": "아모레퍼시픽미술관"}, {"name": "갯마을 한강로점", "type": "candidate", "spot": ""}, {"name": "둘촌해장", "type": "candidate", "spot": ""}, {"name": "야래향", "type": "candidate", "spot": ""}, {"name": "봉피양", "type": "candidate", "spot": ""}]}, {"id": "anguk", "name": "안국·삼청동", "restaurants": [{"name": "황생가칼국수", "type": "fixed", "spot": "국립현대미술관 서울"}, {"name": "온미관 안국", "type": "fixed", "spot": "서울공예박물관"}, {"name": "우래옥", "type": "candidate", "spot": ""}, {"name": "안암", "type": "candidate", "spot": ""}, {"name": "깡통만두", "type": "candidate", "spot": ""}, {"name": "개성만두 궁", "type": "candidate", "spot": ""}, {"name": "신라제면 안국점", "type": "candidate", "spot": ""}]}, {"id": "gwanghwamun", "name": "광화문·정동", "restaurants": [{"name": "청진옥", "type": "fixed", "spot": "대한민국역사박물관"}, {"name": "이문설농탕", "type": "candidate", "spot": ""}, {"name": "강서면옥", "type": "candidate", "spot": ""}, {"name": "이북만두", "type": "candidate", "spot": ""}, {"name": "북창갈비", "type": "candidate", "spot": ""}, {"name": "광화문국밥", "type": "candidate", "spot": ""}, {"name": "유림면", "type": "candidate", "spot": ""}, {"name": "남도식당", "type": "candidate", "spot": ""}]}, {"id": "seochon", "name": "서촌·부암동", "restaurants": [{"name": "토속촌 삼계탕", "type": "candidate", "spot": ""}, {"name": "자하손만두", "type": "candidate", "spot": ""}, {"name": "능라도", "type": "candidate", "spot": ""}, {"name": "사직로서울", "type": "candidate", "spot": ""}]}, {"id": "daehakro", "name": "창경궁·대학로", "restaurants": [{"name": "선동보리밥", "type": "candidate", "spot": ""}, {"name": "혜화칼국수", "type": "candidate", "spot": ""}, {"name": "학림다방", "type": "candidate", "spot": ""}, {"name": "페르시안궁전", "type": "personal", "spot": ""}]}, {"id": "euljiro", "name": "을지로·종로3가", "restaurants": [{"name": "우래옥", "type": "fixed", "spot": ""}, {"name": "진옥화할매원조닭한마리", "type": "candidate", "spot": ""}, {"name": "대련집", "type": "candidate", "spot": ""}, {"name": "안동장", "type": "candidate", "spot": ""}]}, {"id": "seodaemun", "name": "서대문·독립문", "restaurants": [{"name": "대성집", "type": "candidate", "spot": ""}, {"name": "한옥집", "type": "candidate", "spot": ""}, {"name": "도깨비손칼국수", "type": "candidate", "spot": ""}, {"name": "영천시장 원조떡볶이", "type": "candidate", "spot": ""}]}, {"id": "seongbuk", "name": "성북동", "restaurants": [{"name": "쌍다리기사식당", "type": "candidate", "spot": ""}, {"name": "금왕돈까스", "type": "candidate", "spot": ""}, {"name": "성북동면옥집", "type": "candidate", "spot": ""}]}, {"id": "seongsu", "name": "성수·서울숲", "restaurants": [{"name": "성수온실", "type": "candidate", "spot": ""}, {"name": "소문난성수감자탕", "type": "candidate", "spot": ""}, {"name": "성수족발", "type": "candidate", "spot": ""}, {"name": "밀본", "type": "candidate", "spot": ""}]}, {"id": "iksun", "name": "익선동", "restaurants": [{"name": "송암온반", "type": "fixed", "spot": ""}]}, {"id": "olympic", "name": "올림픽공원·몽촌토성", "restaurants": [{"name": "청와옥", "type": "fixed", "spot": "올림픽공원"}, {"name": "이성원쉐프의 청년감자탕", "type": "candidate", "spot": "올림픽공원"}, {"name": "유천냉면", "type": "fixed", "spot": "몽촌토성"}, {"name": "몽촌닭갈비", "type": "candidate", "spot": "몽촌토성"}, {"name": "칼누들바", "type": "personal", "spot": "개인 픽"}]}];
+const STORAGE_KEY = "spm_food_master_v2";
+let data = loadData();
+let activeArea = data[0]?.id || "";
+let manageMode = false;
+let editing = null;
+
+function uid(prefix="id"){return prefix+"_"+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function loadData(){
+  try{
+    const saved=JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if(Array.isArray(saved)) return saved;
+  }catch(e){}
+  return structuredClone(INITIAL).map(a=>({...a,restaurants:a.restaurants.map(r=>({id:uid("food"),checked:false,...r}))}));
+}
+function saveData(){localStorage.setItem(STORAGE_KEY,JSON.stringify(data));render()}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function typeLabel(t){return t==="fixed"?"픽스":t==="personal"?"개인픽":"후보"}
+
+function render(){
+  document.getElementById("app").classList.toggle("manage-on",manageMode);
+  document.getElementById("manageBtn").textContent=manageMode?"관리모드 끄기":"관리모드 켜기";
+  document.getElementById("areaCount").textContent=data.length;
+  document.getElementById("foodCount").textContent=data.reduce((n,a)=>n+a.restaurants.length,0);
+  document.getElementById("visitedCount").textContent=data.reduce((n,a)=>n+a.restaurants.filter(r=>r.checked).length,0);
+
+  const q=document.getElementById("search").value.trim().toLowerCase();
+  document.getElementById("tabs").innerHTML=data.map(a=>`<button class="tab ${a.id===activeArea?"active":""}" onclick="selectArea('${a.id}')">${esc(a.name)} · ${a.restaurants.length}</button>`).join("");
+
+  const area=data.find(a=>a.id===activeArea) || data[0];
+  if(!area){document.getElementById("content").innerHTML='<div class="empty">생활권을 추가하세요.</div>';return}
+  activeArea=area.id;
+  const foods=area.restaurants.filter(r=>!q||r.name.toLowerCase().includes(q)||r.spot.toLowerCase().includes(q));
+  document.getElementById("content").innerHTML=`
+    <section class="area-card">
+      <div class="area-head">
+        <h2>📍 ${esc(area.name)}</h2>
+        <div class="area-actions">
+          <button class="mini" onclick="moveArea(-1)">←</button>
+          <button class="mini" onclick="moveArea(1)">→</button>
+          <button class="mini" onclick="editArea()">수정</button>
+          <button class="mini danger" onclick="deleteArea()">삭제</button>
+        </div>
+      </div>
+      <div class="food-list">
+        ${foods.length?foods.map(r=>`
+          <div class="food ${r.checked?"checked":""}">
+            <input type="checkbox" ${r.checked?"checked":""} onchange="toggleFood('${r.id}',this.checked)">
+            <div>
+              <div class="food-name">${esc(r.name)}</div>
+              ${r.spot?`<div class="food-meta">${esc(r.spot)}</div>`:""}
+            </div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span class="badge ${r.type}">${typeLabel(r.type)}</span>
+              <div class="food-actions">
+                <button class="mini" onclick="moveFood('${r.id}',-1)">↑</button>
+                <button class="mini" onclick="moveFood('${r.id}',1)">↓</button>
+                <button class="mini" onclick="editFood('${r.id}')">수정</button>
+                <button class="mini danger" onclick="deleteFood('${r.id}')">삭제</button>
+              </div>
+            </div>
+          </div>`).join(""):'<div class="empty">검색 결과가 없습니다.</div>'}
+      </div>
+    </section>`;
+}
+function selectArea(id){activeArea=id;render()}
+function currentArea(){return data.find(a=>a.id===activeArea)}
+function toggleFood(id,checked){const r=currentArea().restaurants.find(x=>x.id===id);if(r){r.checked=checked;saveData()}}
+function moveArea(dir){const i=data.findIndex(a=>a.id===activeArea),j=i+dir;if(i<0||j<0||j>=data.length)return;[data[i],data[j]]=[data[j],data[i]];saveData()}
+function moveFood(id,dir){const a=currentArea(),i=a.restaurants.findIndex(r=>r.id===id),j=i+dir;if(i<0||j<0||j>=a.restaurants.length)return;[a.restaurants[i],a.restaurants[j]]=[a.restaurants[j],a.restaurants[i]];saveData()}
+function deleteArea(){const a=currentArea();if(!confirm(`'${a.name}' 생활권과 맛집을 모두 삭제할까요?`))return;data=data.filter(x=>x.id!==a.id);activeArea=data[0]?.id||"";saveData()}
+function deleteFood(id){const a=currentArea(),r=a.restaurants.find(x=>x.id===id);if(!confirm(`'${r.name}'을 삭제할까요?`))return;a.restaurants=a.restaurants.filter(x=>x.id!==id);saveData()}
+
+function openModal(kind,payload=null){
+  editing={kind,payload};
+  const title=document.getElementById("modalTitle"),form=document.getElementById("formArea");
+  if(kind==="area"){
+    title.textContent=payload?"생활권 수정":"생활권 추가";
+    form.innerHTML=`<div class="field"><label>생활권 이름</label><input id="areaName" value="${esc(payload?.name||"")}" placeholder="예: 한남동"></div>`;
+  } else {
+    title.textContent=payload?"맛집 수정":"맛집 추가";
+    form.innerHTML=`
+      <div class="field"><label>맛집 이름</label><input id="foodName" value="${esc(payload?.name||"")}" placeholder="맛집 이름"></div>
+      <div class="field"><label>연결 생활권</label><select id="foodArea">${data.map(a=>`<option value="${a.id}" ${a.id===(payload?.areaId||activeArea)?"selected":""}>${esc(a.name)}</option>`).join("")}</select></div>
+      <div class="field"><label>구분</label><select id="foodType">
+        <option value="fixed" ${payload?.type==="fixed"?"selected":""}>픽스</option>
+        <option value="candidate" ${!payload||payload.type==="candidate"?"selected":""}>후보</option>
+        <option value="personal" ${payload?.type==="personal"?"selected":""}>개인픽</option>
+      </select></div>
+      <div class="field"><label>연결 장소·메모</label><input id="foodSpot" value="${esc(payload?.spot||"")}" placeholder="예: 전쟁기념관"></div>`;
+  }
+  document.getElementById("modal").classList.add("show");
+}
+function closeModal(){document.getElementById("modal").classList.remove("show");editing=null}
+function editArea(){openModal("area",currentArea())}
+function editFood(id){const r=currentArea().restaurants.find(x=>x.id===id);openModal("food",{...r,areaId:activeArea})}
+function saveModal(){
+  if(editing.kind==="area"){
+    const name=document.getElementById("areaName").value.trim();if(!name)return alert("생활권 이름을 입력하세요.");
+    if(editing.payload) editing.payload.name=name;
+    else{const id=uid("area");data.push({id,name,restaurants:[]});activeArea=id}
+  }else{
+    const name=document.getElementById("foodName").value.trim();if(!name)return alert("맛집 이름을 입력하세요.");
+    const areaId=document.getElementById("foodArea").value,type=document.getElementById("foodType").value,spot=document.getElementById("foodSpot").value.trim();
+    if(editing.payload){
+      const oldArea=data.find(a=>a.id===editing.payload.areaId);
+      const idx=oldArea.restaurants.findIndex(r=>r.id===editing.payload.id);
+      const updated={...oldArea.restaurants[idx],name,type,spot};
+      oldArea.restaurants.splice(idx,1);
+      data.find(a=>a.id===areaId).restaurants.push(updated);
+      activeArea=areaId;
+    }else{
+      data.find(a=>a.id===areaId).restaurants.push({id:uid("food"),name,type,spot,checked:false});
+      activeArea=areaId;
+    }
+  }
+  closeModal();saveData();
+}
+
+document.getElementById("manageBtn").onclick=()=>{manageMode=!manageMode;render()};
+document.getElementById("addAreaBtn").onclick=()=>openModal("area");
+document.getElementById("fab").onclick=()=>openModal("food");
+document.getElementById("cancelBtn").onclick=closeModal;
+document.getElementById("saveBtn").onclick=saveModal;
+document.getElementById("modal").onclick=e=>{if(e.target.id==="modal")closeModal()};
+document.getElementById("search").oninput=render;
+document.getElementById("exportBtn").onclick=()=>{
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="SundayPMMuseum_맛집백업.json";a.click();URL.revokeObjectURL(a.href);
+};
+document.getElementById("importInput").onchange=async e=>{
+  try{const imported=JSON.parse(await e.target.files[0].text());if(!Array.isArray(imported))throw 0;data=imported;activeArea=data[0]?.id||"";saveData();alert("복원이 완료되었습니다.");}
+  catch{alert("올바른 JSON 백업 파일이 아닙니다.");}
+  e.target.value="";
+};
+document.getElementById("resetBtn").onclick=()=>{
+  if(!confirm("수정한 맛집 데이터를 모두 지우고 기본값으로 복원할까요?"))return;
+  localStorage.removeItem(STORAGE_KEY);data=loadData();activeArea=data[0]?.id||"";render();
+};
+render();
+</script>
+</body>
+</html>

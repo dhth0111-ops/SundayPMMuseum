@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>S2-01 전쟁기념관</title>
+<style>
+*{box-sizing:border-box}
+body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f4f4f4;max-width:760px;margin:auto;padding:16px;color:#222}
+.card{background:#fff;border-radius:12px;padding:16px;margin:12px 0;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+h1,h2,h3{margin-top:0}
+.cover-img{width:100%;border-radius:10px;margin-bottom:12px;display:block;max-height:440px;object-fit:cover}
+input[type=file]{width:100%;margin-top:8px}
+label{display:block;margin:9px 0;line-height:1.5}
+textarea{width:100%;height:80px;border:1px solid #ccc;border-radius:8px;padding:10px;font:inherit;resize:vertical}
+details summary{cursor:pointer;font-weight:700}
+details ul{padding-left:22px;line-height:1.75}
+.photo-item{padding:12px 0;border-bottom:1px solid #e8e8e8}
+.photo-item:last-child{border-bottom:0}
+.photo-preview img{width:100%;max-height:360px;object-fit:cover;border-radius:10px;margin-top:10px}
+.delete-photo{display:none;margin-top:8px;border:1px solid #ccc;border-radius:8px;background:#fff;padding:8px 10px;cursor:pointer}
+.meta{color:#555}
+.notice{font-size:.9rem;color:#666;margin-bottom:0}
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h2>📸 대표사진</h2>
+  <img id="coverPreview" class="cover-img" src="data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='700' viewBox='0 0 1200 700'%3E%3Crect width='1200' height='700' fill='%23e9ecef'/%3E%3Crect x='100' y='110' width='1000' height='420' rx='24' fill='%23d7ddd8'/%3E%3Ccircle cx='300' cy='280' r='95' fill='%23b9c8ba'/%3E%3Crect x='470' y='215' width='470' height='180' rx='16' fill='%23f7f7f7'/%3E%3Ctext x='600' y='585' text-anchor='middle' font-family='sans-serif' font-size='44' fill='%23555'%3E전쟁기념관 대표사진%3C/text%3E%3Ctext x='600' y='635' text-anchor='middle' font-family='sans-serif' font-size='28' fill='%23777'%3E아래에서 사진을 선택하면 교체됩니다%3C/text%3E%3C/svg%3E" alt="전쟁기념관 대표사진">
+  <input type="file" id="cover" accept="image/*">
+  <p class="notice">사진을 선택하면 대표사진이 교체되어 이 기기에 저장됩니다.</p>
+</div>
+
+<div class="card">
+  <h1>🎖️ 전쟁기념관</h1>
+  <p class="meta"><b>S2-01</b> · Season 2 · 📍 용산 생활권</p>
+</div>
+
+<div class="card">
+  <h2>📍 기본정보</h2>
+  <p><b>주소</b> : 서울특별시 용산구 이태원로 29</p>
+  <p>전쟁기념관은 우리나라의 전쟁사를 시대별로 살펴보고, 전쟁의 교훈과 평화의 가치를 생각해 볼 수 있는 역사·문화 공간입니다.</p>
+  <p><b>주요 특징</b> : 전쟁역사실, 6·25전쟁실, 호국추모실, 대형 장비 옥외전시장, 형제의 상, 어린이박물관</p>
+</div>
+
+<div class="card">
+  <h2>🕒 관람정보</h2>
+  <details>
+    <summary>보기</summary>
+    <ul>
+      <li>관람시간 : 09:30~17:40</li>
+      <li>입장마감 : 17:00</li>
+      <li>휴관일 : 매주 월요일</li>
+      <li>월요일이 포함된 연휴에는 연휴 다음 날 휴관</li>
+      <li>관람요금 : 무료</li>
+      <li>일부 대관·특별전시는 별도 요금</li>
+      <li>추천 관람시간 : 약 2~3시간</li>
+      <li>홈페이지 : <a href="https://www.warmemo.or.kr" target="_blank" rel="noopener">warmemo.or.kr</a></li>
+    </ul>
+  </details>
+</div>
+
+<div class="card">
+  <h2>⭐ 꼭 해야 할 것</h2>
+  <label><input type='checkbox' class='save-check'> 호국추모실 관람</label>
+  <label><input type='checkbox' class='save-check'> 6·25전쟁실 관람</label>
+  <label><input type='checkbox' class='save-check'> 전쟁역사실 관람</label>
+  <label><input type='checkbox' class='save-check'> 옥외 대형 장비 전시장 둘러보기</label>
+  <label><input type='checkbox' class='save-check'> 형제의 상 감상</label>
+</div>
+
+<div class="card">
+  <h2>📷 사진명소</h2>
+
+  <div class="photo-item">
+    <label><input type="checkbox" class="save-check"> 형제의 상</label>
+    <input type="file" accept="image/*" class="photo-input" data-photo="1">
+    <div class="photo-preview" id="photo-preview-1"></div>
+    <button type="button" class="delete-photo" data-photo="1">첨부사진 삭제</button>
+  </div>
+
+  <div class="photo-item">
+    <label><input type="checkbox" class="save-check"> 평화의 광장</label>
+    <input type="file" accept="image/*" class="photo-input" data-photo="2">
+    <div class="photo-preview" id="photo-preview-2"></div>
+    <button type="button" class="delete-photo" data-photo="2">첨부사진 삭제</button>
+  </div>
+
+  <div class="photo-item">
+    <label><input type="checkbox" class="save-check"> 전쟁기념관 정면</label>
+    <input type="file" accept="image/*" class="photo-input" data-photo="3">
+    <div class="photo-preview" id="photo-preview-3"></div>
+    <button type="button" class="delete-photo" data-photo="3">첨부사진 삭제</button>
+  </div>
+
+  <div class="photo-item">
+    <label><input type="checkbox" class="save-check"> 옥외 장비 전시장</label>
+    <input type="file" accept="image/*" class="photo-input" data-photo="4">
+    <div class="photo-preview" id="photo-preview-4"></div>
+    <button type="button" class="delete-photo" data-photo="4">첨부사진 삭제</button>
+  </div>
+
+  <div class="photo-item">
+    <label><input type="checkbox" class="save-check"> 평화의 시계탑</label>
+    <input type="file" accept="image/*" class="photo-input" data-photo="5">
+    <div class="photo-preview" id="photo-preview-5"></div>
+    <button type="button" class="delete-photo" data-photo="5">첨부사진 삭제</button>
+  </div>
+</div>
+
+<div class="card">
+  <h2>🍜 맛집</h2>
+  <h3>👑 픽스맛집</h3>
+  <label><input type='checkbox' class='save-check'> 문배동육칼</label>
+
+  <h3>📍 용산 생활권 후보군</h3>
+  <label><input type='checkbox' class='save-check'> 갯마을 한강로점</label>
+  <label><input type='checkbox' class='save-check'> 둘촌해장</label>
+  <label><input type='checkbox' class='save-check'> 야래향</label>
+  <label><input type='checkbox' class='save-check'> 봉피양</label>
+
+  <p class="notice">식사 후 실제 방문한 곳을 체크합니다.</p>
+</div>
+
+<div class="card">
+  <h2>🍎 사과머리</h2>
+  <textarea class="save-text" aria-label="사과머리 관람평"></textarea>
+  <h2>👶 아기</h2>
+  <textarea class="save-text" aria-label="아기 관람평"></textarea>
+  <h2>🐥 꼬꼬마</h2>
+  <textarea class="save-text" aria-label="꼬꼬마 관람평"></textarea>
+</div>
+
+<div class="card">
+  <label><input type="checkbox" class="save-check"> ✅ 방문 완료</label>
+</div>
+
+<script>
+const PREFIX = 'S2-01_';
+
+document.querySelectorAll('.save-check').forEach((el, i) => {
+  const key = PREFIX + 'cb_' + i;
+  el.checked = localStorage.getItem(key) === '1';
+  el.addEventListener('change', () => {
+    localStorage.setItem(key, el.checked ? '1' : '0');
+  });
+});
+
+document.querySelectorAll('.save-text').forEach((el, i) => {
+  const key = PREFIX + 'ta_' + i;
+  el.value = localStorage.getItem(key) || '';
+  el.addEventListener('input', () => localStorage.setItem(key, el.value));
+});
+
+const coverInput = document.getElementById('cover');
+const coverPreview = document.getElementById('coverPreview');
+const savedCover = localStorage.getItem(PREFIX + 'coverImg');
+if (savedCover) coverPreview.src = savedCover;
+
+coverInput.addEventListener('change', (event) => {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    coverPreview.src = reader.result;
+    try {
+      localStorage.setItem(PREFIX + 'coverImg', reader.result);
+    } catch (e) {
+      alert('사진 용량이 커서 저장하지 못했습니다. 더 작은 사진을 사용해 주세요.');
+    }
+  };
+  reader.readAsDataURL(file);
+});
+
+function showPhoto(photoId, dataUrl) {
+  const preview = document.getElementById('photo-preview-' + photoId);
+  const button = document.querySelector('.delete-photo[data-photo="' + photoId + '"]');
+  preview.innerHTML = '';
+  if (dataUrl) {
+    const img = document.createElement('img');
+    img.src = dataUrl;
+    img.alt = '사진명소 첨부사진';
+    preview.appendChild(img);
+    button.style.display = 'inline-block';
+  } else {
+    button.style.display = 'none';
+  }
+}
+
+document.querySelectorAll('.photo-input').forEach((input) => {
+  const photoId = input.dataset.photo;
+  const key = PREFIX + 'photo_' + photoId;
+  showPhoto(photoId, localStorage.getItem(key));
+
+  input.addEventListener('change', (event) => {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        localStorage.setItem(key, reader.result);
+        showPhoto(photoId, reader.result);
+      } catch (e) {
+        alert('사진 용량이 커서 저장하지 못했습니다. 더 작은 사진을 사용해 주세요.');
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+});
+
+document.querySelectorAll('.delete-photo').forEach((button) => {
+  button.addEventListener('click', () => {
+    const photoId = button.dataset.photo;
+    localStorage.removeItem(PREFIX + 'photo_' + photoId);
+    const input = document.querySelector('.photo-input[data-photo="' + photoId + '"]');
+    if (input) input.value = '';
+    showPhoto(photoId, '');
+  });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+SundayPMMuseum
+Version: V2.0.3 Stable
+Build date: 2026-08-02
+
+Cloud: Firebase Firestore data sync
+Photos: Local IndexedDB + Full JSON backup
+Backup: All data + all photos (Base64, WebP/JPEG)

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P004 서울역사박물관</title>
+<style>
+*{box-sizing:border-box}body{font-family:system-ui;background:#f4f4f4;max-width:760px;margin:auto;padding:16px;color:#222}
+.card{background:#fff;border-radius:12px;padding:16px;margin:12px 0;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+h1,h2,h3{margin-top:0}.cover{width:100%;border-radius:10px;max-height:440px;object-fit:cover;margin-bottom:10px}
+label{display:block;margin:9px 0}textarea{width:100%;height:80px;border:1px solid #ccc;border-radius:8px;padding:10px}
+.photo{padding:12px 0;border-bottom:1px solid #eee}.preview img{width:100%;max-height:360px;object-fit:cover;border-radius:10px;margin-top:10px}
+button{margin-top:8px;padding:8px 10px;border:1px solid #ccc;border-radius:8px;background:#fff}.muted{color:#666;font-size:.9rem}
+</style>
+</head>
+<body>
+<div class="card">
+<h2>📸 대표사진</h2>
+<img id="coverPreview" class="cover" src="data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='700'%3E%3Crect width='1200' height='700' fill='%23e9ecef'/%3E%3Ctext x='600' y='350' text-anchor='middle' font-family='sans-serif' font-size='44' fill='%23666'%3E서울역사박물관 대표사진%3C/text%3E%3C/svg%3E">
+<input type="file" id="cover" accept="image/*"><p class="muted">사진을 선택하면 이 기기에 저장됩니다.</p>
+</div>
+
+<div class="card"><h1>🏛️ 서울역사박물관</h1><p><b>P004</b> · Season 1 · 📍 광화문·정동 생활권</p></div>
+
+<div class="card">
+<h2>📍 기본정보</h2>
+<p><b>주소</b> : 서울특별시 종로구 새문안로 55</p>
+<p>선사시대부터 현대까지 서울의 역사와 문화를 살펴볼 수 있는 서울 대표 역사박물관입니다.</p>
+<p><b>주요 특징</b> : 서울 역사 상설전시, 기획전시, 경희궁 인접, 무료 관람</p>
+</div>
+
+<div class="card">
+<h2>🕒 관람정보</h2>
+<details><summary>보기</summary><ul>
+<li>화~금 : 09:00~20:00</li>
+<li>토·일·공휴일 3~10월 : 09:00~19:00</li>
+<li>토·일·공휴일 11~2월 : 09:00~18:00</li>
+<li>휴관일 : 매주 월요일, 1월 1일</li>
+<li>관람요금 : 무료</li>
+<li>추천 관람시간 : 약 2시간</li>
+<li><a href="https://museum.seoul.go.kr" target="_blank">공식 홈페이지</a></li>
+</ul></details>
+</div>
+
+<div class="card"><h2>⭐ 꼭 해야 할 것</h2>
+<label><input type="checkbox" class="save-check"> 서울역사 상설전시 관람</label>
+<label><input type="checkbox" class="save-check"> 조선시대 한양 전시 보기</label>
+<label><input type="checkbox" class="save-check"> 근현대 서울 전시 관람</label>
+<label><input type="checkbox" class="save-check"> 기획전시 관람</label>
+<label><input type="checkbox" class="save-check"> 로비 및 기념품 코너 둘러보기</label>
+</div>
+
+<div class="card"><h2>📷 사진명소</h2>
+<div class="photo"><label><input type="checkbox" class="save-check"> 박물관 정문</label><input type="file" class="photo-input" data-id="1" accept="image/*"><div id="pv1" class="preview"></div><button data-id="1" class="del">첨부사진 삭제</button></div>
+<div class="photo"><label><input type="checkbox" class="save-check"> 로비</label><input type="file" class="photo-input" data-id="2" accept="image/*"><div id="pv2" class="preview"></div><button data-id="2" class="del">첨부사진 삭제</button></div>
+<div class="photo"><label><input type="checkbox" class="save-check"> 상설전시 입구</label><input type="file" class="photo-input" data-id="3" accept="image/*"><div id="pv3" class="preview"></div><button data-id="3" class="del">첨부사진 삭제</button></div>
+<div class="photo"><label><input type="checkbox" class="save-check"> 야외 광장</label><input type="file" class="photo-input" data-id="4" accept="image/*"><div id="pv4" class="preview"></div><button data-id="4" class="del">첨부사진 삭제</button></div>
+<div class="photo"><label><input type="checkbox" class="save-check"> 경희궁 연결 공간</label><input type="file" class="photo-input" data-id="5" accept="image/*"><div id="pv5" class="preview"></div><button data-id="5" class="del">첨부사진 삭제</button></div>
+</div>
+
+<div class="card">
+<h2>🍜 맛집</h2><h3>👑 픽스맛집</h3><p>없음</p>
+<h3>📍 광화문·정동 생활권 후보군</h3>
+<label><input type="checkbox" class="save-check"> 청진옥</label>
+<label><input type="checkbox" class="save-check"> 이문설농탕</label>
+<label><input type="checkbox" class="save-check"> 강서면옥</label>
+<label><input type="checkbox" class="save-check"> 광화문국밥</label>
+<label><input type="checkbox" class="save-check"> 유림면</label>
+<label><input type="checkbox" class="save-check"> 남도식당</label>
+</div>
+
+<div class="card">
+<h2>🍎 사과머리</h2><textarea class="save-text"></textarea>
+<h2>👶 아기</h2><textarea class="save-text"></textarea>
+<h2>🐥 꼬꼬마</h2><textarea class="save-text"></textarea>
+</div>
+
+<div class="card"><label><input type="checkbox" class="save-check"> ✅ 방문 완료</label></div>
+
+<script>
+const P='P004_';
+document.querySelectorAll('.save-check').forEach((e,i)=>{let k=P+'cb'+i;e.checked=localStorage.getItem(k)==='1';e.onchange=()=>localStorage.setItem(k,e.checked?'1':'0')});
+document.querySelectorAll('.save-text').forEach((e,i)=>{let k=P+'ta'+i;e.value=localStorage.getItem(k)||'';e.oninput=()=>localStorage.setItem(k,e.value)});
+const cp=document.getElementById('coverPreview'),ci=document.getElementById('cover'),sc=localStorage.getItem(P+'cover');if(sc)cp.src=sc;
+ci.onchange=()=>{let f=ci.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{cp.src=r.result;try{localStorage.setItem(P+'cover',r.result)}catch(e){alert('사진 용량이 너무 큽니다.')}};r.readAsDataURL(f)};
+function show(id,d){let pv=document.getElementById('pv'+id),b=document.querySelector('.del[data-id="'+id+'"]');pv.innerHTML='';if(d){let im=new Image();im.src=d;pv.appendChild(im);b.style.display='inline-block'}else b.style.display='none'}
+document.querySelectorAll('.photo-input').forEach(x=>{let id=x.dataset.id,k=P+'ph'+id;show(id,localStorage.getItem(k));x.onchange=()=>{let f=x.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{localStorage.setItem(k,r.result);show(id,r.result)}catch(e){alert('사진 용량이 너무 큽니다.')}};r.readAsDataURL(f)}});
+document.querySelectorAll('.del').forEach(b=>b.onclick=()=>{let id=b.dataset.id;localStorage.removeItem(P+'ph'+id);show(id,'')});
+</script>
+</body></html>
