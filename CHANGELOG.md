@@ -16,3 +16,18 @@
 - 핀치 줌 및 더블탭 확대/축소
 - 좌우 스와이프 사진 이동
 - 전체화면 닫기 및 사진 순서 표시
+
+## V2.0.3 Stable Final Patch - 2026-08-04
+
+- 앱 정보의 Firestore 연결 상태 표시 개선
+- 마지막 Firestore 동기화 시각 저장 키 통일 및 정확한 표시
+- 사진 백업을 JSON(Base64/WebP), 복원을 JSON 자동 복원으로 안내
+- 앱 화면의 사진 클라우드 동기화 문구 제거
+
+## V2.0.3 Stable Restore Fix (2026-08-04)
+- Restored the missing `mergeSeedImages()` migration function.
+- Fixed JSON backup restore.
+- Fixed Firestore cloud download/apply.
+- Fixed user initial-data restore.
+- Fixed the cloud-download confirmation string and improved error messages.
+- Bumped the service-worker cache version.

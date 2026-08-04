@@ -14,10 +14,15 @@
 ## 백업 방식
 
 앱 전체 ZIP과 `SundayPMMuseum_backup_full_YYYY-MM-DD.json` 파일을 함께 보관하면 됩니다.
-사진은 Firebase Storage가 아니라 기기 저장소와 전체 JSON 백업에 보관됩니다.
+사진은 기기 저장소와 전체 JSON 백업에 보관되며, Firestore에는 사진을 제외한 앱 데이터만 동기화됩니다.
 
 ## 배포
 
 ZIP을 풀고 안의 파일을 GitHub 저장소 최상단에 업로드합니다.
 GitHub Pages는 `main` 브랜치의 `/(root)`를 사용합니다.
 - 방문기록 사진 전체화면 크게 보기, 핀치 줌, 좌우 스와이프
+
+## Final Patch
+
+- Firestore 연결 상태와 마지막 동기화 시각을 정확히 표시
+- 사진 백업은 JSON(Base64/WebP), 복원은 JSON 자동 복원으로 안내
