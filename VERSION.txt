@@ -1,9 +1,2 @@
-SundayPMMuseum
-Version: V2.0.3 Stable Restore Fix
-Build: 2026-08-04
-
-- Firestore data synchronization
-- Full JSON backup with Base64/WebP photos
-- Backup restore fixed
-- Cloud download fixed
-- Initial data restore fixed
+SundayPMMuseum V2.0.6
+Firebase photo sync + persistent chunk resume + cache refresh

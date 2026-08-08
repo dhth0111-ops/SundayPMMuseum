@@ -1,7 +1,7 @@
-const CACHE_NAME='spm-v2-0-3-stable-final';
+const CACHE_NAME='spm-v2-0-6-firebase-photo-resume';
 const APP_SHELL=[
-  './','./index.html','./manifest.webmanifest',
-  './icon-192-v15.png','./icon-512-v15.png','./firebase-sync.js',
+  './','./manifest.webmanifest',
+  './icon-192-v15.png','./icon-512-v15.png',
   './applehead.svg','./kkokkoma.svg','./angel.svg'
 ];
 self.addEventListener('install',event=>{
@@ -13,14 +13,16 @@ self.addEventListener('activate',event=>{
 });
 self.addEventListener('fetch',event=>{
   if(event.request.method!=='GET')return;
-  if(event.request.mode==='navigate'){
-    event.respondWith(fetch(event.request,{cache:'no-store'}).then(response=>{
-      const copy=response.clone();caches.open(CACHE_NAME).then(cache=>cache.put('./index.html',copy));return response;
-    }).catch(()=>caches.match('./index.html')));
-    return;
-  }
   const url=new URL(event.request.url);
   if(url.origin!==self.location.origin)return;
+  // index와 Firebase 동기화 코드는 항상 네트워크 최신본을 우선합니다.
+  if(event.request.mode==='navigate' || url.pathname.endsWith('/index.html') || url.pathname.endsWith('/firebase-sync.js')){
+    event.respondWith(fetch(event.request,{cache:'no-store'}).then(response=>{
+      if(response.ok){const copy=response.clone();caches.open(CACHE_NAME).then(cache=>cache.put(event.request.mode==='navigate'?'./index.html':event.request,copy));}
+      return response;
+    }).catch(()=>caches.match(event.request.mode==='navigate'?'./index.html':event.request)));
+    return;
+  }
   event.respondWith(caches.match(event.request).then(cached=>cached||fetch(event.request).then(response=>{
     if(response.ok){const copy=response.clone();caches.open(CACHE_NAME).then(cache=>cache.put(event.request,copy));}
     return response;
